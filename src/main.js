@@ -18,7 +18,7 @@ function posx(d) {
 
 d3.select("#update").on("click", function() {
   const num = Math.floor(Math.random() * 10);
-  numbers = d3.range(num).map(n => Math.floor(Math.random() * 400) );
+  numbers = d3.range(num).map(n => Math.floor(Math.random() * 40) );
   console.log('numbers', numbers);
 
   // let lines = svg.selectAll("line")
@@ -44,8 +44,11 @@ d3.select("#update").on("click", function() {
     .attr("stroke-width", 2);
 });
 
+// step 2: introduce scales to handle layout
 
+// step 3: transition from lines to rects
 
+// step 4: adjust layout (introducing gs)
 
 
 
