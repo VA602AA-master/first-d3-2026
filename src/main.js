@@ -10,18 +10,29 @@ const svg = d3.select("#app")
   .attr("width", 500)
   .attr("height", 500);
 
-function posy(d, i) {
-    return i * 10;
-  }  
+
 
 const xScale = d3.scaleLinear()
   .domain([0, MAX_VAL])
-  .range([0, 483]);
+  .range([0, 480]);
+
+const yScale = d3.scaleBand()
+  // .domain()
+  .range([0, 480])
+  .paddingInner(0.3)
+  .paddingOuter(0.3);
+
+// function posy(d, i) {
+//     return yScale(i);
+//   } 
+
 
 d3.select("#update").on("click", function() {
-  const num = Math.floor(Math.random() * 10);
+  const num = Math.floor(Math.random() * 80);
   numbers = d3.range(num).map(n => Math.floor(Math.random() * MAX_VAL) );
   console.log('numbers', numbers);
+
+  yScale.domain(d3.range(num));
 
   // OPTION 1: maintain xScale fixed
   // OPTION 2: 
@@ -38,20 +49,18 @@ d3.select("#update").on("click", function() {
   //   .append("line")
   //   .merge(lines);
 
-  let lines = svg.selectAll("line")
+  let rects = svg.selectAll("rect")
   .data(numbers)
-  .join("line");
+  .join("rect");
 
-  lines
-    .attr("x1", 0)
-    .attr("y1", posy)
-    .attr("y2", posy)
-    .attr("x2", xScale)
+  rects
+    .attr("x", 0)
+    .attr("y", (d, i) => yScale(i))
+    .attr("height", yScale.bandwidth())
+    .attr("width", xScale)
     .attr("stroke", "black")
     .attr("stroke-width", 2);
 });
-
-// step 2: introduce scales to handle layout
 
 // step 3: transition from lines to rects
 
