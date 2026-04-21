@@ -49,20 +49,25 @@ d3.select("#update").on("click", function() {
   //   .append("line")
   //   .merge(lines);
 
-  let rects = svg.selectAll("rect")
-  .data(numbers)
-  .join("rect");
+  let gs = svg.selectAll("g.bars")
+    .data(numbers)
+    .join("g")
+    .classed('bars', true)
+    .attr('transform', (d, i) => `translate(0, ${yScale(i)})`)
+ 
 
-  rects
-    .attr("x", 0)
-    .attr("y", (d, i) => yScale(i))
+  gs.selectAll('rect')
+    .data(d => [d])
+    .join('rect')
+    // .attr("x", 0)
+    // .attr("y", (d, i) => yScale(i))
     .attr("height", yScale.bandwidth())
     .attr("width", xScale)
     .attr("stroke", "black")
     .attr("stroke-width", 2);
-});
 
-// step 3: transition from lines to rects
+
+});
 
 // step 4: adjust layout (introducing gs)
 
