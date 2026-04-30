@@ -1,5 +1,7 @@
 import * as d3 from "d3";
 
+const WIDTH = 500;
+const HEIGHT = 500;
 const MAX_VAL = 400;
 const API_URL = "http://localhost:8000";
 const DEFAULT_GRAPH_NAME= "default-graph";
@@ -7,10 +9,15 @@ const DEFAULT_GRAPH_NAME= "default-graph";
 let numbers = [13, 34, 24, 5, 8, 15, 20];
 
 
-const svg = d3.select("#app")
+const svgN = d3.select("#app")
   .append("svg")
-  .attr("width", 500)
-  .attr("height", 500);
+  .attr("width", WIDTH)
+  .attr("height", HEIGHT);
+
+const svgE = d3.select("#app")
+  .append("svg")
+  .attr("width", WIDTH)
+  .attr("height", HEIGHT);
 
 const barchart = BarChart();
 
@@ -29,10 +36,21 @@ fetch(`${API_URL}/set-default/${DEFAULT_GRAPH_NAME}`, {
       fetch(`${API_URL}/node-types/default`)
         .then(res => res.json())
         .then(data => {
-          console.log('data', data);
-          svg.datum(
+          console.log('data Nodes', data);
+          svgN.datum(
             Object.values(
               data.node_type_counts
+            )
+          )
+          .call(barchart);
+        })
+      fetch(`${API_URL}/edge-types/default`)
+        .then(res => res.json())
+        .then(data => {
+          console.log('data Edges', data);
+          svgE.datum(
+            Object.values(
+              data.edge_type_counts
             )
           )
           .call(barchart);
