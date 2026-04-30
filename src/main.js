@@ -38,7 +38,7 @@ fetch(`${API_URL}/set-default/${DEFAULT_GRAPH_NAME}`, {
         .then(data => {
           console.log('data Nodes', data);
           svgN.datum(
-            Object.values(
+            Object.entries(
               data.node_type_counts
             )
           )
@@ -49,7 +49,7 @@ fetch(`${API_URL}/set-default/${DEFAULT_GRAPH_NAME}`, {
         .then(data => {
           console.log('data Edges', data);
           svgE.datum(
-            Object.values(
+            Object.entries(
               data.edge_type_counts
             )
           )
@@ -76,8 +76,12 @@ function BarChart(){
     .paddingOuter(0.3);
 
   function my(selection){
+    console.log('selection datum', selection.datum());  
+
     yScale.domain(d3.range(selection.datum().length));
-    xScale.domain([0, d3.max(selection.datum())]);
+    xScale.domain([0, 
+      d3.max(selection.datum(), d => d[1])
+    ]);
 
     let gs = selection.selectAll("g.bars")
       .data(selection.datum())
@@ -92,9 +96,19 @@ function BarChart(){
       // .attr("x", 0)
       // .attr("y", (d, i) => yScale(i))
       .attr("height", yScale.bandwidth())
-      .attr("width", xScale)
+      .attr("width", d => xScale(d[1]))
       .attr("stroke", "black")
       .attr("stroke-width", 2);
+
+
+    gs.selectAll('text')
+      .data(d => [d])
+      .join('text')
+      .attr("x", 5)
+      .attr("y", yScale.bandwidth() / 2)
+      .text(d => `${d[0]}: ${d[1]}`)
+      .attr("alignment-baseline", "middle")
+      .attr("fill", "white");
   }
 
   return my;
